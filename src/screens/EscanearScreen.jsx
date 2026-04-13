@@ -1,18 +1,17 @@
 import React, { useState } from 'react';
 import {
   View, Text, ScrollView, TouchableOpacity,
-  StyleSheet, StatusBar, Image, ActivityIndicator,
-  Alert,
+  StyleSheet, StatusBar, ActivityIndicator, Alert,
 } from 'react-native';
 import { COLORS, GLOBAL, SPACING, RADIUS, TYPOGRAPHY } from '../theme';
 
 // ─── Mock: productos detectados por OCR ──────────────────────
 const MOCK_ITEMS = [
-  { id: 1, nombre: 'Manzanas Fuji',       categoria: 'Frutas',         cantidad: '1.5 kg', precio: '$45.00', seleccionado: true  },
-  { id: 2, nombre: 'Leche Entera',        categoria: 'Lácteos',        cantidad: '2 L',    precio: '$52.00', seleccionado: true  },
-  { id: 3, nombre: 'Pan Integral',        categoria: 'Panadería',      cantidad: '1 pza',  precio: '$38.00', seleccionado: true  },
-  { id: 4, nombre: 'Lechuga Romana',      categoria: 'Verduras',       cantidad: '1 pza',  precio: '$22.00', seleccionado: true  },
-  { id: 5, nombre: 'Papel higiénico',     categoria: 'No alimentario', cantidad: '4 rls',  precio: '$65.00', seleccionado: false },
+  { id: 1, nombre: 'Manzanas Fuji',   categoria: 'Frutas',         cantidad: '1.5 kg', precio: '$45.00', seleccionado: true  },
+  { id: 2, nombre: 'Leche Entera',    categoria: 'Lácteos',        cantidad: '2 L',    precio: '$52.00', seleccionado: true  },
+  { id: 3, nombre: 'Pan Integral',    categoria: 'Panadería',      cantidad: '1 pza',  precio: '$38.00', seleccionado: true  },
+  { id: 4, nombre: 'Lechuga Romana',  categoria: 'Verduras',       cantidad: '1 pza',  precio: '$22.00', seleccionado: true  },
+  { id: 5, nombre: 'Papel higiénico', categoria: 'No alimentario', cantidad: '4 rls',  precio: '$65.00', seleccionado: false },
 ];
 
 const VIDA_UTIL = [
@@ -24,11 +23,10 @@ const VIDA_UTIL = [
 
 // ─── Pantalla principal ───────────────────────────────────────
 export default function EscanearScreen({ navigation }) {
-  const [paso, setPaso]         = useState('inicio');   // 'inicio' | 'procesando' | 'revision'
-  const [items, setItems]       = useState(MOCK_ITEMS);
+  const [paso, setPaso]           = useState('inicio');
+  const [items, setItems]         = useState(MOCK_ITEMS);
   const [imagenUri, setImagenUri] = useState(null);
 
-  // Simula captura / selección de imagen
   function simularCaptura() {
     setPaso('procesando');
     setTimeout(() => {
@@ -49,7 +47,6 @@ export default function EscanearScreen({ navigation }) {
       Alert.alert('Sin selección', 'Selecciona al menos un producto para agregar.');
       return;
     }
-    // Aquí llamarías a tu servicio real
     Alert.alert(
       '¡Listo!',
       `${seleccionados.length} producto${seleccionados.length > 1 ? 's' : ''} agregado${seleccionados.length > 1 ? 's' : ''} al inventario.`,
@@ -74,7 +71,7 @@ export default function EscanearScreen({ navigation }) {
         <View style={GLOBAL.centered}>
           <ActivityIndicator size="large" color={COLORS.primary} />
           <Text style={[TYPOGRAPHY.small, { marginTop: SPACING.md }]}>
-            Procesando imagen…
+            Analizando recibo con OCR…
           </Text>
         </View>
       )}
@@ -82,6 +79,7 @@ export default function EscanearScreen({ navigation }) {
       {/* ── PASO: inicio ── */}
       {paso === 'inicio' && (
         <ScrollView showsVerticalScrollIndicator={false}>
+
           {/* Instrucciones */}
           <View style={styles.instruccionesBox}>
             <Text style={[TYPOGRAPHY.h3, { marginBottom: SPACING.sm }]}>
@@ -100,9 +98,9 @@ export default function EscanearScreen({ navigation }) {
             ))}
           </View>
 
-          {/* Botón: cámara */}
+          {/* Botón cámara */}
           <TouchableOpacity
-            style={styles.cameroBtn}
+            style={styles.camaraBtn}
             onPress={simularCaptura}
             activeOpacity={0.8}
           >
@@ -113,7 +111,7 @@ export default function EscanearScreen({ navigation }) {
             </Text>
           </TouchableOpacity>
 
-          {/* Botón: galería */}
+          {/* Botón galería */}
           <TouchableOpacity
             style={styles.galeriaBtn}
             onPress={simularCaptura}
@@ -150,7 +148,7 @@ export default function EscanearScreen({ navigation }) {
       {paso === 'revision' && (
         <ScrollView showsVerticalScrollIndicator={false}>
 
-          {/* Banner éxito */}
+          {/* Banner éxito — verde */}
           <View style={styles.exitoBanner}>
             <Text style={styles.exitoIcon}>✓</Text>
             <View style={{ flex: 1 }}>
@@ -181,7 +179,6 @@ export default function EscanearScreen({ navigation }) {
             <Text style={[TYPOGRAPHY.small, { marginBottom: SPACING.md, color: COLORS.textHint }]}>
               Selecciona los productos alimentarios para agregar al inventario
             </Text>
-
             {items.map(item => (
               <ItemCard
                 key={item.id}
@@ -191,14 +188,14 @@ export default function EscanearScreen({ navigation }) {
             ))}
           </View>
 
-          {/* Estimación de vida útil */}
+          {/* Estimación vida útil — amarillo */}
           <View style={styles.vidaUtilBox}>
             <Text style={[TYPOGRAPHY.h3, { marginBottom: SPACING.sm }]}>
               Estimación de vida útil
             </Text>
             {VIDA_UTIL.map(({ categoria, dias }) => (
               <View key={categoria} style={styles.tipRow}>
-                <View style={styles.tipBullet} />
+                <View style={[styles.tipBullet, { backgroundColor: COLORS.primary }]} />
                 <Text style={TYPOGRAPHY.small}>
                   {categoria}:{' '}
                   <Text style={{ color: COLORS.textSecondary, fontWeight: '600' }}>
@@ -215,23 +212,24 @@ export default function EscanearScreen({ navigation }) {
           {/* Acciones */}
           <View style={{ marginHorizontal: SPACING.lg, gap: SPACING.sm, paddingBottom: 40 }}>
             <TouchableOpacity
-              style={styles.btnPrimario}
+              style={GLOBAL.btnPrimary}
               onPress={agregarAlInventario}
               activeOpacity={0.85}
             >
-              <Text style={styles.btnPrimarioText}>
+              <Text style={GLOBAL.btnPrimaryText}>
                 Agregar {items.filter(i => i.seleccionado).length} productos al inventario →
               </Text>
             </TouchableOpacity>
 
             <TouchableOpacity
-              style={styles.btnSecundario}
+              style={GLOBAL.btnSecondary}
               onPress={() => { setPaso('inicio'); setItems(MOCK_ITEMS); }}
               activeOpacity={0.8}
             >
-              <Text style={styles.btnSecundarioText}>Escanear otro recibo</Text>
+              <Text style={GLOBAL.btnSecondaryText}>Escanear otro recibo</Text>
             </TouchableOpacity>
           </View>
+
         </ScrollView>
       )}
     </View>
@@ -254,10 +252,7 @@ function ItemCard({ item, onToggle }) {
       ]}
     >
       {/* Checkbox */}
-      <View style={[
-        styles.checkbox,
-        seleccionado && esAlimentario && styles.checkboxActivo,
-      ]}>
+      <View style={[styles.checkbox, seleccionado && esAlimentario && styles.checkboxActivo]}>
         {seleccionado && esAlimentario && (
           <Text style={{ color: '#fff', fontSize: 11, fontWeight: '700' }}>✓</Text>
         )}
@@ -290,15 +285,16 @@ function ItemCard({ item, onToggle }) {
   );
 }
 
-// ─── Estilos ──────────────────────────────────────────────────
+// ─── Estilos únicos de esta pantalla ─────────────────────────
 const styles = StyleSheet.create({
+
   instruccionesBox: {
     marginHorizontal: SPACING.lg,
     marginBottom: SPACING.md,
     padding: SPACING.md,
-    backgroundColor: COLORS.surface ?? '#F8F8F8',
+    backgroundColor: COLORS.primaryLight,
     borderWidth: 1,
-    borderColor: COLORS.border,
+    borderColor: COLORS.primaryBorder,
     borderRadius: RADIUS.md,
   },
   tipRow: {
@@ -314,28 +310,28 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.textHint,
   },
 
-  // Botón cámara (grande, dashed)
-  cameroBtn: {
+  // Botón cámara — borde punteado verde
+  camaraBtn: {
     marginHorizontal: SPACING.lg,
     marginBottom: SPACING.sm,
     height: 160,
     borderWidth: 2,
     borderStyle: 'dashed',
-    borderColor: COLORS.border,
+    borderColor: COLORS.primaryBorder,
     borderRadius: RADIUS.md,
     alignItems: 'center',
     justifyContent: 'center',
     gap: SPACING.xs,
-    backgroundColor: '#fff',
+    backgroundColor: COLORS.primaryLight,
   },
-  camaraBtnIcon: { fontSize: 40 },
+  camaraBtnIcon:  { fontSize: 40 },
   camaraBtnTitle: {
     fontSize: 15,
     fontWeight: '600',
-    color: COLORS.text ?? '#1A1A1A',
+    color: COLORS.primaryText,
   },
 
-  // Botón galería (compacto)
+  // Botón galería
   galeriaBtn: {
     marginHorizontal: SPACING.lg,
     marginBottom: SPACING.lg,
@@ -347,7 +343,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: SPACING.lg,
     gap: SPACING.md,
-    backgroundColor: '#fff',
+    backgroundColor: COLORS.bgCard,
   },
   galeriaBtnIcon: { fontSize: 28 },
 
@@ -359,41 +355,44 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: COLORS.border,
     borderRadius: RADIUS.md,
-    backgroundColor: COLORS.surface ?? '#F8F8F8',
+    backgroundColor: COLORS.bgCard,
   },
   previewPlaceholder: {
     width: '100%',
     height: 180,
-    backgroundColor: COLORS.border,
+    backgroundColor: COLORS.bgInput,
     borderRadius: RADIUS.sm,
     alignItems: 'center',
     justifyContent: 'center',
   },
 
-  // Banner éxito
+  // Banner éxito — verde
   exitoBanner: {
     marginHorizontal: SPACING.lg,
     marginBottom: SPACING.md,
     padding: SPACING.md,
-    backgroundColor: COLORS.primary ?? '#1A1A1A',
+    backgroundColor: COLORS.primary,
     borderRadius: RADIUS.md,
     flexDirection: 'row',
     alignItems: 'center',
     gap: SPACING.md,
   },
-  exitoIcon: { fontSize: 22, color: '#fff' },
-  exitoTitulo: {
-    color: '#fff',
-    fontSize: 15,
-    fontWeight: '700',
-    marginBottom: 2,
-  },
-  exitoSub: {
-    color: 'rgba(255,255,255,0.75)',
-    fontSize: 12,
+  exitoIcon:   { fontSize: 22, color: '#fff' },
+  exitoTitulo: { color: '#fff', fontSize: 15, fontWeight: '700', marginBottom: 2 },
+  exitoSub:    { color: 'rgba(255,255,255,0.80)', fontSize: 12 },
+
+  // Estimación vida útil — amarillo informativo
+  vidaUtilBox: {
+    marginHorizontal: SPACING.lg,
+    marginBottom: SPACING.lg,
+    padding: SPACING.md,
+    borderWidth: 1,
+    borderColor: COLORS.secondaryBorder,
+    borderRadius: RADIUS.md,
+    backgroundColor: COLORS.secondaryLight,
   },
 
-  // Tarjeta de item
+  // Tarjeta de item detectado
   itemCard: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -402,15 +401,15 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: COLORS.border,
     borderRadius: RADIUS.md,
-    backgroundColor: '#fff',
+    backgroundColor: COLORS.bgCard,
     marginBottom: SPACING.sm,
   },
   itemCardSeleccionado: {
-    borderColor: COLORS.primary ?? '#1A1A1A',
-    backgroundColor: COLORS.surface ?? '#F8F8F8',
+    borderColor: COLORS.primary,
+    backgroundColor: COLORS.primaryLight,
   },
   itemCardDeshabilitado: {
-    opacity: 0.5,
+    opacity: 0.45,
   },
   checkbox: {
     width: 22,
@@ -420,11 +419,11 @@ const styles = StyleSheet.create({
     borderColor: COLORS.border,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#fff',
+    backgroundColor: COLORS.bgCard,
   },
   checkboxActivo: {
-    backgroundColor: COLORS.primary ?? '#1A1A1A',
-    borderColor: COLORS.primary ?? '#1A1A1A',
+    backgroundColor: COLORS.primary,
+    borderColor: COLORS.primary,
   },
   itemMeta: {
     flexDirection: 'row',
@@ -435,51 +434,12 @@ const styles = StyleSheet.create({
   categoriaBadge: {
     paddingHorizontal: 6,
     paddingVertical: 2,
-    backgroundColor: COLORS.border,
+    backgroundColor: COLORS.bgChip,
     borderRadius: RADIUS.sm,
   },
   categoriaBadgeText: {
     fontSize: 10,
     fontWeight: '600',
-    color: COLORS.textSecondary ?? '#555',
-  },
-
-  // Vida útil
-  vidaUtilBox: {
-    marginHorizontal: SPACING.lg,
-    marginBottom: SPACING.lg,
-    padding: SPACING.md,
-    borderWidth: 1,
-    borderColor: COLORS.border,
-    borderRadius: RADIUS.md,
-    backgroundColor: COLORS.surface ?? '#F8F8F8',
-  },
-
-  // Botones de acción
-  btnPrimario: {
-    height: 54,
-    backgroundColor: COLORS.primary ?? '#1A1A1A',
-    borderRadius: RADIUS.md,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  btnPrimarioText: {
-    color: '#fff',
-    fontSize: 15,
-    fontWeight: '700',
-  },
-  btnSecundario: {
-    height: 48,
-    borderWidth: 1,
-    borderColor: COLORS.border,
-    borderRadius: RADIUS.md,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#fff',
-  },
-  btnSecundarioText: {
-    fontSize: 14,
-    fontWeight: '500',
-    color: COLORS.textSecondary ?? '#555',
+    color: COLORS.textSecondary,
   },
 });
