@@ -1,3 +1,4 @@
+// src/screens/EscanearScreen.jsx
 import React, { useState } from 'react';
 import {
   View, Text, ScrollView, TouchableOpacity,
@@ -5,33 +6,21 @@ import {
 } from 'react-native';
 import { COLORS, GLOBAL, SPACING, RADIUS, TYPOGRAPHY } from '../theme';
 
-// ─── Mock: productos detectados por OCR ──────────────────────
-const MOCK_ITEMS = [
-  { id: 1, nombre: 'Manzanas',        categoria: 'Frutas',         cantidad: '1.5 kg', precio: '$45.00', seleccionado: true  },
-  { id: 2, nombre: 'Pollo',           categoria: 'Carnes',         cantidad: '2 kg',    precio: '$52.00', seleccionado: true  },
-  { id: 3, nombre: 'Duraznos',        categoria: 'Frutas',         cantidad: '1.5 kg', precio: '$45.00', seleccionado: true  },
-  { id: 4, nombre: 'Lechuga',         categoria: 'Verduras',       cantidad: '1 pza',  precio: '$22.00', seleccionado: true  },
-  { id: 5, nombre: 'Papel higiénico', categoria: 'No alimentario', cantidad: '4 rls',  precio: '$65.00', seleccionado: false },
-];
+// 👇 Importar desde el archivo de mocks
+import { MOCK_ITEMS_ESCANER, VIDA_UTIL_ESCANER, OCR_CONFIG } from '../mocks/escaneo';
 
-const VIDA_UTIL = [
-  { categoria: 'Frutas',    dias: '5–7 días' },
-  { categoria: 'Verduras',  dias: '3–5 días' },
-  { categoria: 'Carnes',   dias: '1–4 días' },
-];
 
-// ─── Pantalla principal ───────────────────────────────────────
 export default function EscanearScreen({ navigation }) {
-  const [paso, setPaso]           = useState('inicio');
-  const [items, setItems]         = useState(MOCK_ITEMS);
+  const [paso, setPaso] = useState('inicio');
+  const [items, setItems] = useState(MOCK_ITEMS_ESCANER);  // 👈 Usar import
   const [imagenUri, setImagenUri] = useState(null);
 
   function simularCaptura() {
     setPaso('procesando');
     setTimeout(() => {
-      setImagenUri('mock');
+      setImagenUri(OCR_CONFIG.mockImageUri);  // 👈 Usar config
       setPaso('revision');
-    }, 1800);
+    }, OCR_CONFIG.processingTime);  // 👈 Usar config
   }
 
   function toggleItem(id) {
@@ -53,11 +42,11 @@ export default function EscanearScreen({ navigation }) {
     );
   }
 
+  // El resto del componente permanece igual...
   return (
     <View style={GLOBAL.screen}>
       <StatusBar barStyle="dark-content" />
 
-      {/* Header */}
       <View style={GLOBAL.header}>
         <Text style={TYPOGRAPHY.h1}>Escanear Recibo</Text>
         <Text style={[TYPOGRAPHY.small, { marginTop: 2 }]}>
@@ -65,7 +54,6 @@ export default function EscanearScreen({ navigation }) {
         </Text>
       </View>
 
-      {/* ── PASO: procesando ── */}
       {paso === 'procesando' && (
         <View style={GLOBAL.centered}>
           <ActivityIndicator size="large" color={COLORS.primary} />
@@ -75,11 +63,8 @@ export default function EscanearScreen({ navigation }) {
         </View>
       )}
 
-      {/* ── PASO: inicio ── */}
       {paso === 'inicio' && (
         <ScrollView showsVerticalScrollIndicator={false}>
-
-          {/* Instrucciones */}
           <View style={styles.instruccionesBox}>
             <Text style={[TYPOGRAPHY.h3, { marginBottom: SPACING.sm }]}>
               Instrucciones
@@ -97,7 +82,6 @@ export default function EscanearScreen({ navigation }) {
             ))}
           </View>
 
-          {/* Botón cámara */}
           <TouchableOpacity
             style={styles.camaraBtn}
             onPress={simularCaptura}
@@ -110,7 +94,6 @@ export default function EscanearScreen({ navigation }) {
             </Text>
           </TouchableOpacity>
 
-          {/* Botón galería */}
           <TouchableOpacity
             style={styles.galeriaBtn}
             onPress={simularCaptura}
@@ -127,7 +110,6 @@ export default function EscanearScreen({ navigation }) {
             </View>
           </TouchableOpacity>
 
-          {/* Vista previa vacía */}
           <View style={styles.previewBox}>
             <Text style={[TYPOGRAPHY.small, { marginBottom: SPACING.sm, color: COLORS.textHint }]}>
               Vista previa
@@ -143,11 +125,8 @@ export default function EscanearScreen({ navigation }) {
         </ScrollView>
       )}
 
-      {/* ── PASO: revisión ── */}
       {paso === 'revision' && (
         <ScrollView showsVerticalScrollIndicator={false}>
-
-          {/* Banner éxito — verde */}
           <View style={styles.exitoBanner}>
             <Text style={styles.exitoIcon}>✓</Text>
             <View style={{ flex: 1 }}>
@@ -158,7 +137,6 @@ export default function EscanearScreen({ navigation }) {
             </View>
           </View>
 
-          {/* Miniatura del recibo */}
           <View style={styles.previewBox}>
             <Text style={[TYPOGRAPHY.small, { marginBottom: SPACING.sm, color: COLORS.textHint }]}>
               Imagen del recibo
@@ -170,7 +148,6 @@ export default function EscanearScreen({ navigation }) {
             </View>
           </View>
 
-          {/* Lista de productos */}
           <View style={{ marginHorizontal: SPACING.lg, marginBottom: SPACING.md }}>
             <Text style={[TYPOGRAPHY.h3, { marginBottom: SPACING.xs }]}>
               Productos detectados
@@ -187,12 +164,11 @@ export default function EscanearScreen({ navigation }) {
             ))}
           </View>
 
-          {/* Estimación vida útil — amarillo */}
           <View style={styles.vidaUtilBox}>
             <Text style={[TYPOGRAPHY.h3, { marginBottom: SPACING.sm }]}>
               Estimación de vida útil
             </Text>
-            {VIDA_UTIL.map(({ categoria, dias }) => (
+            {VIDA_UTIL_ESCANER.map(({ categoria, dias }) => (  // 👈 Usar import
               <View key={categoria} style={styles.tipRow}>
                 <View style={[styles.tipBullet, { backgroundColor: COLORS.primary }]} />
                 <Text style={TYPOGRAPHY.small}>
@@ -208,7 +184,6 @@ export default function EscanearScreen({ navigation }) {
             </Text>
           </View>
 
-          {/* Acciones */}
           <View style={{ marginHorizontal: SPACING.lg, gap: SPACING.sm, paddingBottom: 40 }}>
             <TouchableOpacity
               style={GLOBAL.btnPrimary}
@@ -222,20 +197,19 @@ export default function EscanearScreen({ navigation }) {
 
             <TouchableOpacity
               style={GLOBAL.btnSecondary}
-              onPress={() => { setPaso('inicio'); setItems(MOCK_ITEMS); }}
+              onPress={() => { setPaso('inicio'); setItems(MOCK_ITEMS_ESCANER); }}  // 👈 Usar import
               activeOpacity={0.8}
             >
               <Text style={GLOBAL.btnSecondaryText}>Escanear otro recibo</Text>
             </TouchableOpacity>
           </View>
-
         </ScrollView>
       )}
     </View>
   );
 }
 
-// ─── Tarjeta de producto detectado ───────────────────────────
+// El componente ItemCard y los estilos permanecen igual...
 function ItemCard({ item, onToggle }) {
   const { nombre, categoria, cantidad, precio, seleccionado } = item;
   const esAlimentario = categoria !== 'No alimentario';
@@ -250,14 +224,12 @@ function ItemCard({ item, onToggle }) {
         !esAlimentario && styles.itemCardDeshabilitado,
       ]}
     >
-      {/* Checkbox */}
       <View style={[styles.checkbox, seleccionado && esAlimentario && styles.checkboxActivo]}>
         {seleccionado && esAlimentario && (
           <Text style={{ color: '#fff', fontSize: 11, fontWeight: '700' }}>✓</Text>
         )}
       </View>
 
-      {/* Info */}
       <View style={{ flex: 1 }}>
         <Text style={[
           TYPOGRAPHY.h3,
@@ -276,7 +248,6 @@ function ItemCard({ item, onToggle }) {
         </View>
       </View>
 
-      {/* X si no alimentario */}
       {!esAlimentario && (
         <Text style={{ color: COLORS.textHint, fontSize: 18 }}>✕</Text>
       )}
@@ -284,9 +255,8 @@ function ItemCard({ item, onToggle }) {
   );
 }
 
-// ─── Estilos únicos de esta pantalla ─────────────────────────
+// Los estilos permanecen exactamente igual...
 const styles = StyleSheet.create({
-
   instruccionesBox: {
     marginHorizontal: SPACING.lg,
     marginBottom: SPACING.md,
@@ -308,8 +278,6 @@ const styles = StyleSheet.create({
     borderRadius: 3,
     backgroundColor: COLORS.textHint,
   },
-
-  // Botón cámara — borde punteado verde
   camaraBtn: {
     marginHorizontal: SPACING.lg,
     marginBottom: SPACING.sm,
@@ -323,14 +291,12 @@ const styles = StyleSheet.create({
     gap: SPACING.xs,
     backgroundColor: COLORS.primaryLight,
   },
-  camaraBtnIcon:  { fontSize: 40 },
+  camaraBtnIcon: { fontSize: 40 },
   camaraBtnTitle: {
     fontSize: 15,
     fontWeight: '600',
     color: COLORS.primaryText,
   },
-
-  // Botón galería
   galeriaBtn: {
     marginHorizontal: SPACING.lg,
     marginBottom: SPACING.lg,
@@ -345,8 +311,6 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.bgCard,
   },
   galeriaBtnIcon: { fontSize: 28 },
-
-  // Vista previa
   previewBox: {
     marginHorizontal: SPACING.lg,
     marginBottom: SPACING.lg,
@@ -364,8 +328,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-
-  // Banner éxito — verde
   exitoBanner: {
     marginHorizontal: SPACING.lg,
     marginBottom: SPACING.md,
@@ -376,11 +338,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: SPACING.md,
   },
-  exitoIcon:   { fontSize: 22, color: '#fff' },
+  exitoIcon: { fontSize: 22, color: '#fff' },
   exitoTitulo: { color: '#fff', fontSize: 15, fontWeight: '700', marginBottom: 2 },
-  exitoSub:    { color: 'rgba(255,255,255,0.80)', fontSize: 12 },
-
-  // Estimación vida útil — amarillo informativo
+  exitoSub: { color: 'rgba(255,255,255,0.80)', fontSize: 12 },
   vidaUtilBox: {
     marginHorizontal: SPACING.lg,
     marginBottom: SPACING.lg,
@@ -390,8 +350,6 @@ const styles = StyleSheet.create({
     borderRadius: RADIUS.md,
     backgroundColor: COLORS.secondaryLight,
   },
-
-  // Tarjeta de item detectado
   itemCard: {
     flexDirection: 'row',
     alignItems: 'center',

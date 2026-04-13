@@ -1,11 +1,10 @@
-// src/screens/AlertasScreen.jsx
+
 import React, { useState } from 'react';
 import {
   View, Text, ScrollView, TouchableOpacity,
   StyleSheet, StatusBar,
 } from 'react-native';
 import { COLORS, GLOBAL, RISK, SPACING, RADIUS, TYPOGRAPHY } from '../theme';
-// 👇 Importar desde el archivo de datos
 import { ALERTAS_MOCK, FILTROS } from '../mocks/alertas';
 
 export default function AlertasScreen({ navigation }) {
@@ -40,7 +39,7 @@ export default function AlertasScreen({ navigation }) {
         <Text style={[TYPOGRAPHY.small, { color: COLORS.textHint, marginBottom: SPACING.md }]}>
           Notificaciones preventivas sobre el riesgo de deterioro de tus alimentos
         </Text>
-        
+
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
           <View style={styles.filtrosRow}>
             {FILTROS.map(f => (
