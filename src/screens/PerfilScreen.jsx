@@ -28,19 +28,19 @@ const MENU = [
 const HISTORIAL = [
   {
     id: 1,
-    nombre: 'Pan dulce',
+    nombre: 'Frutas frescas',
     fecha: '2 Mar 2026',
     estado: 'Completada',
     receptor: 'Servidores del Servidor',
-    cantidad: '500 g',
+    cantidad: '5 kg',
   },
   {
     id: 2,
-    nombre: 'Productos lácteos',
+    nombre: 'Productos carnicos',
     fecha: '28 Feb 2026',
     estado: 'Completada',
     receptor: 'Banco de Alimentos CDMX',
-    cantidad: '2 L',
+    cantidad: '2 kg',
   },
   {
     id: 3,

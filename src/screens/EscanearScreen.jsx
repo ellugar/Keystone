@@ -7,18 +7,17 @@ import { COLORS, GLOBAL, SPACING, RADIUS, TYPOGRAPHY } from '../theme';
 
 // ─── Mock: productos detectados por OCR ──────────────────────
 const MOCK_ITEMS = [
-  { id: 1, nombre: 'Manzanas Fuji',   categoria: 'Frutas',         cantidad: '1.5 kg', precio: '$45.00', seleccionado: true  },
-  { id: 2, nombre: 'Leche Entera',    categoria: 'Lácteos',        cantidad: '2 L',    precio: '$52.00', seleccionado: true  },
-  { id: 3, nombre: 'Pan Integral',    categoria: 'Panadería',      cantidad: '1 pza',  precio: '$38.00', seleccionado: true  },
-  { id: 4, nombre: 'Lechuga Romana',  categoria: 'Verduras',       cantidad: '1 pza',  precio: '$22.00', seleccionado: true  },
+  { id: 1, nombre: 'Manzanas',        categoria: 'Frutas',         cantidad: '1.5 kg', precio: '$45.00', seleccionado: true  },
+  { id: 2, nombre: 'Pollo',           categoria: 'Carnes',         cantidad: '2 kg',    precio: '$52.00', seleccionado: true  },
+  { id: 3, nombre: 'Duraznos',        categoria: 'Frutas',         cantidad: '1.5 kg', precio: '$45.00', seleccionado: true  },
+  { id: 4, nombre: 'Lechuga',         categoria: 'Verduras',       cantidad: '1 pza',  precio: '$22.00', seleccionado: true  },
   { id: 5, nombre: 'Papel higiénico', categoria: 'No alimentario', cantidad: '4 rls',  precio: '$65.00', seleccionado: false },
 ];
 
 const VIDA_UTIL = [
   { categoria: 'Frutas',    dias: '5–7 días' },
   { categoria: 'Verduras',  dias: '3–5 días' },
-  { categoria: 'Lácteos',   dias: '7–10 días' },
-  { categoria: 'Panadería', dias: '3–5 días' },
+  { categoria: 'Carnes',   dias: '1–4 días' },
 ];
 
 // ─── Pantalla principal ───────────────────────────────────────
