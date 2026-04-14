@@ -59,7 +59,16 @@ export const COLORS = {
   navBorder:      '#E2E5DA',
   navActive:      '#2E7D32',   // verde en ítem activo
   navInactive:    '#9EA896',
+
+  // ── Colores adicionales para UI general ──────────────────────
+  white:          '#FFFFFF',
+  black:          '#000000',
+  gray:           '#9EA896',
+  grayLight:      '#E2E5DA',
+  success:        '#43A047',   // verde exitoso
+  warning:        '#F9A825',   // amarillo advertencia
 };
+
 
 // ─── Mapa de niveles de riesgo ────────────────────────────────
 // alto     → rojo   (vencimiento inminente)
